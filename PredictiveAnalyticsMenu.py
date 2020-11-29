@@ -29,11 +29,9 @@ class PredictiveAnalyticsMenu(Menu.Menu):
     #Self is an instance of the class
     #To call this method we must first instantiate an object of the class
     def displayOptions(self):
-        choice = input("What would you like to do 1. Linear Regression \n Q to quit")
+        choice = input("What would you like to do 1. Linear Regression \n Q to quit\n")
         if(choice=="1"):
             self.linearRegression()
-        elif(choice=="2"):
-            self.SVM()
         elif(choice.upper()=="Q"):
             print("You have exited the system")
         else:
@@ -44,17 +42,10 @@ class PredictiveAnalyticsMenu(Menu.Menu):
     def preProcessData(self, forecast_out):
         df['Prediction'] = df['Adj Close'].shift(-forecast_out)
         
-        #Create independent data set X
-        #This dataset will be used for training the model
-        #Converts the df to a numpy array
         X = np.array(df.drop(['Prediction'], 1))
         #Remove last n rows 
         X = X[:-forecast_out]
-        #print(X)
         
-        #Create dependent data set Y
-        #This is the target data which will hold price predictions
-        #It is a typical convention within ML programming to denote X as the features as y as coreesponding labels
         y = np.array(df['Prediction'])
         #Remove NaN values i.e. last n rows 
         #returns everything except the last n items
@@ -67,32 +58,23 @@ class PredictiveAnalyticsMenu(Menu.Menu):
         
         return X_train, X_test, y_train, y_test
     
+    #Use Linear Regression model to predict future stock prices 
+    
     def linearRegression(self):
         df = self.getStockData()
         close_px = df['Adj Close']
         #determines how far in the future we will predict values for i.e. n = 30 would be 30 days
         forecast_out = int(input("How many days in the future would you like predicted?"))
-        #Create 'Prediction' datafram colume which stores the predicted price for the stock n days in the future
-        #Date remains as index
         df['Prediction'] = df['Adj Close'].shift(-forecast_out)
-        print(df.head())
-        #Create independent data set X
-        #This dataset will be used for training the model
         #Converts the df to a numpy array
         X = np.array(df.drop(['Prediction'], 1))
         #Remove last n rows 
         X = X[:-forecast_out]
-        #Create dependent data set Y
-        #This is the target data which will hold price predictions
-        #It is a typical convention within ML programming to denote X as the features as y as coreesponding labels
         y = np.array(df['Prediction'])
         #Remove NaN values i.e. last n rows 
         #returns everything except the last n items
         y = y[:-forecast_out]
         
-        #Split the data into 85% train and 15% test
-        #Model will train by taking input train_x and learning to match to train_y
-        #Then the model will attempt to predict an accurate test_y based on train y
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.15)
         
         lr = LinearRegression()
@@ -125,58 +107,6 @@ class PredictiveAnalyticsMenu(Menu.Menu):
         #lr_prediction.plot(label="Predicted stock prices")
         #plt.legend()
         
-    #K Nearest Neighbour algorithm
-    #Based on the independent variables KNN finds similarities between old data points and new
-    #KNN can be used for both regression and clasification problems
-    #The K in KNN is the number of nearest neighbours we take a vote from
-    #As we decrease the value of K to 1 our prediction becomes less stable
-    #1. Load Data
-    #2. Initlialise value of k
-    #3. Iterate 1 to total number of training data points (training data represents a known point)
-    # a.Calculate distance between test data and each row of training data
-    def KNN(self):
-        scaler = MinMaxScaler(feature_range(0,1) )
-        x_train, X_test, y_train, y_test = preProcessData()
-        x_train_scaled = scaler.fit_transformed(x_train)
-        
-        
- #   def SVM(self):
-# =============================================================================
-#         df = self.getStockData()
-#         close_px = df['Adj Close']
-#         #determines how far in the future we will predict values for i.e. n = 30 would be 30 days
-#         forecast_out = int(input("How many days in the future would you like predicted?"))
-#         #Create 'Prediction' datafram colume which stores the predicted price for the stock n days in the future
-#         #Date remains as index
-#         df['Prediction'] = df['Adj Close'].shift(-forecast_out)
-#         print(df.head())
-#         #Create independent data set X
-#         #This dataset will be used for training the model
-#         #Converts the df to a numpy array
-#         X = np.array(df['Adj Close'])
-#         #Remove last n rows 
-#         X = X[:-forecast_out]
-#         #Create dependent data set Y
-#         #This is the target data which will hold price predictions
-#         #It is a typical convention within ML programming to denote X as the features as y as coreesponding labels
-#         y = np.array(df['Prediction'])
-#         #Remove NaN values i.e. last n rows 
-#         #returns everything except the last n items
-#         y = y[:-forecast_out]
-#         
-#         #Split the data into 85% train and 15% test
-#         #Model will train by taking input train_x and learning to match to train_y
-#         #Then the model will attempt to predict an accurate test_y based on train y
-#         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.15)
-#         #Create support vector machine
-#         svr = svm.SVR()
-#         
-#         #train model
-#         svr.fit(X_train, y_train)
-#         
-#         #crossValScore = cross_validate(estimator=svr, X=X_train, y=y_test,cv=10)
-#         confidenceScore = svr.score(X_test, y_test)
-#         print("Confidence score for SVM is: ", confidenceScore)
-# =============================================================================
+
         
         

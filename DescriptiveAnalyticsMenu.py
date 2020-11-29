@@ -29,7 +29,7 @@ style.use('ggplot')
 #mpl.rcParams['backend.qt4'] = "PySide"
 class DescriptiveAnalyticsMenu(Menu.Menu):
     def displayOptions(self):
-        choice = input("Descriptive Analytics Menu \n What would you like to see? \n 1. Moving Average \n 2. Returns \n 3. Raw Time Series \n 4. Trendline \n 5. Weighted Moving Average \n 6. MACD \n")
+        choice = input("Descriptive Analytics Menu \n What would you like to see? \n 1. Moving Average \n 2. Returns \n 3. Raw Time Series \n 4. Weighted Moving Average \n 5. MACD \n")
         if(choice=="1"):
             #movingAverage function is within the class so to call it the call must be prefaced with the class name
             #Self is the class instance
@@ -41,10 +41,8 @@ class DescriptiveAnalyticsMenu(Menu.Menu):
         elif(choice=="3"):
             self.rawTimeSeries()
         elif(choice=="4"):
-            self.trendLine()
-        elif(choice=="5"):
             self.weightedMovingAverage()
-        elif(choice=="6"):
+        elif(choice=="5"):
             self.MACD()
         elif(choice.upper()=="Q"):
             print("You have quit the system")

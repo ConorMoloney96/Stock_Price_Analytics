@@ -73,14 +73,6 @@ class DescriptiveAnalyticsMenu(Menu.Menu):
         #Moving average steadily rises over the window2012
         mavg = close_px.rolling(window =100).mean()
         print(mavg)
-        
-        
-        
-        
-        
-        #draw_graph(close_px, mavg)
-
-        
 
         #Moving average can be used to predict when to buy/sell stocks 
         #i.e. sell during downturn buy during upturn
@@ -123,11 +115,9 @@ class DescriptiveAnalyticsMenu(Menu.Menu):
     #Expected return measures the mean, or expected value, of the probability distribution of investment returns 
     #Ideal stocks should return as high and stable as possible
     def expectedReturn(self):
-        df = self.getStockData()
-        
+        df = self.getStockData() 
         close_px = df['Adj Close']
         
-        #df.shift(i) shifts the entire dataframe i units down
         #This gets return i/return i-1
         rets = close_px/close_px.shift(1) - 1
         rets.plot(label='return')

@@ -40,20 +40,11 @@ class PredictiveAnalyticsMenu(Menu.Menu):
 
     
     def preProcessData(self, forecast_out):
-        df['Prediction'] = df['Adj Close'].shift(-forecast_out)
-        
+        df['Prediction'] = df['Adj Close'].shift(-forecast_out) 
         X = np.array(df.drop(['Prediction'], 1))
-        #Remove last n rows 
-        X = X[:-forecast_out]
-        
+        X = X[:-forecast_out] 
         y = np.array(df['Prediction'])
-        #Remove NaN values i.e. last n rows 
-        #returns everything except the last n items
-        y = y[:-forecast_out]
-        
-        #Split the data into 85% train and 15% test
-        #Model will train by taking input train_x and learning to match to train_y
-        #Then the model will attempt to predict an accurate test_y based on train y
+        y = y[:-forecast_out]  
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.15)
         
         return X_train, X_test, y_train, y_test
@@ -82,17 +73,11 @@ class PredictiveAnalyticsMenu(Menu.Menu):
         print(y_train)
         #train model
         lr.fit(X_train, y_train)
-        
-        #crossValScore = cross_validate(estimator=svr, X=X_train, y=y_test,cv=10)
-        #Calculated co-efficient of determinanation i.e. r squared
-        #Score function compares predictions for X_test with y_test and return r squared value
+    
         confidenceScore = lr.score(X_test, y_test)
         print("R squared score for this model is: ", confidenceScore)
         
         y_predict = lr.predict(X_test)
-        #Calculate model Root Mean Squared Error (RMSE)
-        #RMSE answers the question: how similar are the numbers in list 1 to list 2 on average
-        #In this case we want to get the similarity between the values predicted by the model on test data y_test and the actual data
         print("RMSE is ", np.sqrt(metrics.mean_squared_error(y_test, y_predict)))
 
         

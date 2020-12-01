@@ -29,7 +29,7 @@ style.use('ggplot')
 #mpl.rcParams['backend.qt4'] = "PySide"
 class DescriptiveAnalyticsMenu(Menu.Menu):
     def displayOptions(self):
-        choice = input("Descriptive Analytics Menu \n What would you like to see? \n 1. Moving Average \n 2. Returns \n 3. Raw Time Series \n 4. Weighted Moving Average \n 5. MACD \n")
+        choice = input("Descriptive Analytics Menu \n What would you like to see? \n 1. Moving Average \n 2. Returns \n 3. Raw Time Series \n 4. Weighted Moving Average \n 5. MACD \n 6. Stock Info \n")
         if(choice=="1"):
             #movingAverage function is within the class so to call it the call must be prefaced with the class name
             #Self is the class instance
@@ -44,12 +44,30 @@ class DescriptiveAnalyticsMenu(Menu.Menu):
             self.weightedMovingAverage()
         elif(choice=="5"):
             self.MACD()
+        elif(choice=="6"):
+            self.basic_stats()
         elif(choice.upper()=="Q"):
             print("You have quit the system")
         else:
             print("Incorrect input. Must be one of options specified")
     
     
+    
+    def basic_stats(self):
+        basic_stats = dict()
+        df = self.getStockData()
+        basic_stats['Mean'] = df['Adj Close'].mean()
+        basic_stats['Median'] = df['Adj Close'].median()
+        basic_stats['1stQ'] = df['Adj Close'].quantile(0.25)
+        basic_stats['3rdQ'] = df['Adj Close'].quantile(0.75)
+        basic_stats['Inter_Quartile_Range'] = (df['Adj Close'].quantile(0.75) - df['Adj Close'].quantile(0.25))
+        basic_stats['Max'] = df['Adj Close'].max()
+        basic_stats['Min'] = df['Adj Close'].min()
+        basic_stats['Range'] = (df['Adj Close'].max() - df['Adj Close'].min())
+        basic_stats['Standard_Deviation'] = df['Adj Close'].std()
+        basic_stats['Coef_of_variation'] = (df['Adj Close'].std()) / df['Adj Close'].mean()
+        basic_stats['Variance'] = df['Adj Close'].var()
+        print(basic_stats)
     
     def rawTimeSeries(self):
         df =self.getStockData()
